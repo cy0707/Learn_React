@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo14</title>
+	<script src="build/react.js"></script>
+	<script src="build/react-dom.js"></script>
+	<script src="build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<script type="text/babel">
+		var ButtonComponent = React.createClass({
+			hanlderClick: function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				var tipE = this.refs.tip;
+				if(tipE.style.display === 'none') {
+					tipE.style.display = 'inline';
+				}else{
+					tipE.style.display = 'none';
+				}
+			},
+			render: function(){
+				return (
+					<div>
+						<button onClick={this.hanlderClick}>显示|隐藏</button><span ref='tip'>测试点击</span>
+					</div>
+				);
+			}
+		});
+
+		var TestComponent = React.createClass({
+			getInitialState: function() {
+				return {
+					inputContent: ' '
+				};
+			},
+			hanlderChange: function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				this.setState({
+					inputContent: event.target.value
+				});
+			},
+			render: function(){
+				return (
+					<div>
+						<input type="text" onChange={this.hanlderChange} />
+						<span>{this.state.inputContent}</span>
+					</div>
+				);
+			}
+		});
+
+		ReactDOM.render(
+			<div>
+				<ButtonComponent />
+				<br/><br/><br/><br/>
+				<TestComponent	/>
+			</div>,
+			document.getElementById('example')
+		);
+	</script>
+</body>
+</html>

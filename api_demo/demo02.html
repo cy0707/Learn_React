@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo02</title>
+	<script src="build/react.js"></script>
+	<script src="build/react-dom.js"></script>
+	<script src="build/browser.min.js"></script>
+</head>
+<body>
+	<div id="example"></div>
+	<script type="text/babel">
+		var names = ['ann', 'lisa', 'jimmy'];
+		ReactDOM.render(
+			<div>
+				{
+					names.map(function(name){
+						return <div>hello, {name}!</div>
+					})
+				}
+			</div>,
+			document.getElementById('example')
+		);
+	</script>
+	<!--在render中 注释{里面的第一条语句加;都会报错} -->
+</body>
+</html>
