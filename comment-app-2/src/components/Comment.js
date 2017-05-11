@@ -19,7 +19,7 @@ class Comment extends Component {
   // 组件挂载之前
   componentWillMount () {
     this._updateTimeString();
-    this._time = setInterval(this._updateTimeString.bind(this), 5000);
+    this._timer = setInterval(this._updateTimeString.bind(this), 5000);
   }
 
   // 更新时间
@@ -57,7 +57,7 @@ class Comment extends Component {
  }
 
   render() {
-    const comment = this.props.comment
+    const comment = this.props.comment;
     return (
       <div className='comment'>
        <div className='comment-user'>

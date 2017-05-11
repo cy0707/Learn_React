@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Comment from 'Comment';
+import Comment from './Comment';
 
 class CommentList extends Component {
   // 默认属性
@@ -10,6 +10,10 @@ class CommentList extends Component {
     onDeleteComment: PropTypes.func
   };
 
+  static defaultProps = {
+     comments: []
+  };
+  
   // 删除评论
   handleDeleteComment (index) {
     if (this.props.onDeleteComment) {
@@ -20,15 +24,13 @@ class CommentList extends Component {
   render() {
     return (
       <div>
-        { this.props.comments.map((comment, i) => {
-            <Comment 
-              comment={comment} 
-              key={i}
-              index={i}
-              onDeleteComment={this.handleDeleteComment.bind(this)}
-            />
-          })
-        }
+        {this.props.comments.map((comment, i) =>
+          <Comment
+            comment={comment}
+            key={i}
+            index={i}
+            onDeleteComment={this.handleDeleteComment.bind(this)} />
+        )}
       </div>
     );
   }

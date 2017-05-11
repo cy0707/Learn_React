@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider} from 'react-redux';
 
-import Header from './Header';
-import Content from './Content';
-import { Provider } from './react-redux';
+import CommentApp from './containers/CommentApp';
+import commentsReducer from './reducers/comments';
 
 import './index.css';
 
-
+const store = createStore(commentsReducer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Index />
+    <CommentApp />
   </Provider>,
   document.getElementById('root')
 )

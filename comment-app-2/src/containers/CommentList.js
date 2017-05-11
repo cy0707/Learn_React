@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-import { connect } form 'react-redux';
-import CommentList fomr '../components/CommentList';
+import { connect } from 'react-redux';
+import CommentList from '../components/CommentList';
 import { initComments, deleteComment} from '../reducers/comments';
 
 // 对于 CommentList 组件，可以看到它接受两个参数：comments 
@@ -41,8 +40,8 @@ class CommentListContainer extends Component {
   render() {
     return (
       <CommentList
-      comments={this.props.comments}
-      onDeleteComment={this.handleDeleteComment.bind(this)} />
+        comments={this.props.comments}
+        onDeleteComment={this.handleDeleteComment.bind(this)} />
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
+// 根据smart组件，传过来的属性props
 class CommentInput extends Component {
   static proptypes = {
     username: PropTypes.any,
@@ -13,6 +13,7 @@ class CommentInput extends Component {
     username: ''
   };
 
+  // 初始化username, content
   constructor (props) {
     super(props);
     this.state = {
@@ -56,7 +57,7 @@ class CommentInput extends Component {
 
   // 组件挂载完成后
   componentDidMount () {
-    this,.textarea.focus();
+    this.textarea.focus();
   }
 
   render() {

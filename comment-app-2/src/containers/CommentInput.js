@@ -1,95 +1,88 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { connect } from 'react-redux';
+import CommentInput from '../components/CommentInput';
+import { addComment } from '../reducers/comments';
 
-class CommentInput extends Component {
+
+class CommentInputContainer extends Component {
+  // 验证传进来的属性
   static proptypes = {
-    username: PropTypes.any,
-    onSubmit: PropTypes.func,
-    onUsernameInputBlur: PropTypes.func
+    comments: PropTypes.array,
+    onSubmit: PropTypes.func
   };
 
-  static defaultProps = {
-    username: ''
-  };
-
-  constructor (props) {
-    super(props);
+  // 初始化username
+  constructor () {
+    super();
     this.state = {
-      username: props.username,
-      content: ''
+      username: ''
     };
   }
 
-  // 修改名字
-  handleUsernameChange (event) {
-    this.setState({
-      username: event.target.value
-    });
+  // 组件挂载之前，从本地存储加载数据
+  componentWillMount () {
+    this._loadUsername();
   }
 
-  // 修改评论内容
-  handleContnetChange (event) {
-    this.setState({
-      content: event.target.value
-    });
-  }
-
-  // 用户名改变
-  handleUsernameBlur (event) {
-    if (this.props.onUserNameInputBlur) {
-      this.props.onUserNameInputBlur(event.target.value);
+  // 本地加载username
+  _loadUsername () {
+    const username = localStorage.getItem('username');
+    if (username) {
+      this.setState({username});
     }
   }
 
-  // 点击评论
-  handleSubmit () {
+  // 存储username
+  _saveUsername (username) {
+    localStorage.setItem('username', username);
+  }
+
+  // 通过props把评论传递下去
+  handleSubmitComment (comment) {
+    if (!comment) return;
+    if (!comment.username) return alert('请输入用户名');
+    if (!comment.content) return alert('请输入评论内容');
+    // 从provide传过来的
+    const { comments } = this.props;
+    // 在一个新的进行修改，数据共享
+    const newComments = [...comments, comment];
+    localStorage.setItem('comments', JSON.stringify(newComments));
+    // 派发一个事件---修改context中的数据
     if (this.props.onSubmit) {
-      this.props.onSubmit({
-        username: this.state.username,
-        content: this.state.content,
-        createdTime: +new Date()
-      })
+      this.props.onSubmit(comment);
     }
-    this.setState({ content: ''});
-  }
-
-  // 组件挂载完成后
-  componentDidMount () {
-    this,.textarea.focus();
   }
 
   render() {
     return (
-      <div className='comment-input'>
-        <div className='comment-field'>
-          <span className='comment-field-name'>用户名：</span>
-          <div className='comment-field-input'>
-            <input
-              value={this.state.username}
-              onBlur={this.handleUsernameBlur.bind(this)}
-              onChange={this.handleUsernameChange.bind(this)}
-            />
-          </div>
-        </div>
-        <div className='comment-field'>
-          <span className='comment-field-name'>评论内容：</span>
-          <div className='comment-field-input'>
-            <textarea 
-              ref={(textarea) => this.textarea=textarea}
-              value={this.state.content}
-              onChange={this.handleContnetChange.bind(this)}
-            />
-          </div>
-        </div>
-        <div className='comment-field-button'>
-          <button onClick={this.handleSubmit.bind(this)}>
-            发布
-          </button>
-        </div>
-      </div>
+      <CommentInput 
+        username={this.state.username}
+        onUsernameInputBlur={this._saveUsername.bind(this)}
+        onSubmit={this.handleSubmitComment.bind(this)}
+      />
     );
   }
 }
 
-export default CommentInput;
+// 包裹的属性---的高阶组价
+// 这个smart组件需要store的comments,提及按钮的事件，存储评论
+const mapStateToProps = (state) => {
+  return {
+    comments: state.comments
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSubmit: (comment) => {
+      dispatch(addComment(comment))
+    }
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentInputContainer);
